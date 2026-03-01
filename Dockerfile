@@ -1,13 +1,11 @@
 FROM php:8.2-apache
 
 # تثبيت الإضافات المطلوبة للارافل
-RUN docker-php-ext-install pdo pdo_mysql
 
 # تفعيل rewrite
 RUN a2enmod rewrite
-
-# السماح باستخدام .htaccess
-RUN sed -i 's/<Directory \/var\/www\/>/,/AllowOverride/s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+RUN docker-php-ext-install pdo
+pdo_mysql
 
 # نسخ المشروع
 COPY . /var/www/html/
@@ -27,5 +25,6 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
 
 

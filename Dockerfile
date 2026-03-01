@@ -7,7 +7,7 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN a2enmod rewrite
 
 # السماح باستخدام .htaccess
-RUN sed -i '/<Directory \/var\/www\/>/,/AllowOverride/s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+RUN sed -i 's/<Directory \/var\/www\/>/,/AllowOverride/s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
 # نسخ المشروع
 COPY . /var/www/html/
@@ -27,4 +27,5 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
 

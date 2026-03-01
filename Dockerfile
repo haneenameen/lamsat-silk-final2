@@ -1,23 +1,30 @@
 FROM php:8.2-apache
 
-# تفعيل خاصية rewrite لمشاريع Laravel
-RUN a2enmod rewrite
-
+# تثبيت الإضافات المطلوبة للارافل
 RUN docker-php-ext-install pdo pdo_mysql
 
+# تفعيل rewrite
+RUN a2enmod rewrite
+
+# السماح باستخدام .htaccess
+RUN sed -i '/<Directory \/var\/www\/>/,/AllowOverride/s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+# نسخ المشروع
 COPY . /var/www/html/
+
 WORKDIR /var/www/html
 
-# تغيير مسار السيرفر ليعمل من داخل مجلد public مباشرة
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
-
-# إنشاء المجلدات الناقصة
+# إنشاء مجلدات Laravel الناقصة
 RUN mkdir -p storage/framework/sessions \
     storage/framework/views \
     storage/framework/cache \
     bootstrap/cache
 
 # إعطاء الصلاحيات
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
+
+CMD ["apache2-foreground"]
+

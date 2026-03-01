@@ -4,24 +4,30 @@ FROM php:8.2-apache
 
 # تفعيل rewrite
 RUN a2enmod rewrite
-
+RUN docker-php-ext-install pdo
+pdo_mysql
 
 # نسخ المشروع
 COPY . /var/www/html/
 
-WORKDIR /var/www/html
-
-# # إنشاء مجلدات Laravel الناقصة
-# RUN mkdir -p storage/framework/sessions \
-#     storage/framework/views \
-#     storage/framework/cache \
-#     bootstrap/cache
+ ENV APACHE_DOCUMENT_ROOT /var/www/
+ html/public
+ RUN sed -ri -e 's!/var/www/html!
+ ${APACHE_DOCUMENT_ROOT}!g' /etc/
+ apache2/sites-available/*.conf
+ RUN sed -ri -e 's!/var/www/html!
+ ${APACHE_DOCUMENT_ROOT}!g' /etc/
+ apache2/apache2-conf/etc/apache2/
+ conf-available/*.conf
 
 # إعطاء الصلاحيات
-RUN chown -R www-data:www-data /var/www/html
+RUN chowd -R 777 /var/www/html/
+storage /var/www/html/bootstrap/cache
+WORKDIR /var/www/html
 
 
 EXPOSE 80
+
 
 
 

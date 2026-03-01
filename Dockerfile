@@ -12,11 +12,11 @@ COPY . /var/www/html/
 
 WORKDIR /var/www/html
 
-# إنشاء مجلدات Laravel الناقصة
-RUN mkdir -p storage/framework/sessions \
-    storage/framework/views \
-    storage/framework/cache \
-    bootstrap/cache
+# # إنشاء مجلدات Laravel الناقصة
+# RUN mkdir -p storage/framework/sessions \
+#     storage/framework/views \
+#     storage/framework/cache \
+#     bootstrap/cache
 
 # إعطاء الصلاحيات
 RUN chown -R www-data:www-data storage bootstrap/cache \
@@ -25,6 +25,7 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
 
 
 
